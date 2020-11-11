@@ -6,10 +6,10 @@ amazon-linux-extras install nginx1 python3.8 -y
 
 cat << 'EOF' >> /etc/nginx/conf.d/demo.conf
 server {
-        listen 80;
+        listen 10080;
         access_log  /var/log/nginx/demo.log;
         location / {
-                proxy_pass http://127.0.0.1:8000;
+                proxy_pass http://127.0.0.1:8001;
                 proxy_set_header Host $host;
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         }
@@ -26,7 +26,7 @@ yum install python3-pip git -y
 pip3 install flask gunicorn boto3
 
 # Git clone to fetch the source
-su - ec2-user -c "cd /home/ec2-user && git clone https://github.com/d2lee/quiz.git"
+su - ec2-user -c "cd /home/ec2-user && git clone https://github.com/j2hz/ccoetest.git"
 
 # Create the gunicorn config file
 cat << 'EOF' >> /etc/systemd/system/gunicorn.service
@@ -40,7 +40,7 @@ Group=ec2-user
 WorkingDirectory=/home/ec2-user/quiz
 ExecStart=/usr/local/bin/gunicorn \
         --workers 3 \
-        --bind 127.0.0.1:8000 \
+        --bind 127.0.0.1:8001 \
         app:app
 
 [Install]
